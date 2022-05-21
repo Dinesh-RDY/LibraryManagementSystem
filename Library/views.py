@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Books
+from .forms import DropDownForm
 # Create your views here.
 def indexView(req):
     return render(req,"index.html",{'text': "index Page"})
 
 def showBooks(req):
+    if req.method == "POST":
+        print("Post")
+        
     books = Books.objects.all()
-    print(books[0])
-    return render(req, "books.html", {"books": books})
+    return render(req, "books.html", {"books": books ,"dropdown":DropDownForm})

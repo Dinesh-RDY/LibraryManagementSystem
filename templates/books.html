@@ -10,6 +10,13 @@
 
 <body>
     Online Library
+    <form method="post" id="menu" onchange="this.form.submit()">
+        {% csrf_token %}
+        {{dropdown}}
+        <button type="submit">Submit</button>
+    </form>
+
+
     <ol>
         {% for book in books %}
         <li>
