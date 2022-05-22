@@ -9,18 +9,17 @@
 </head>
 
 <body>
-    Online Library
-    <form method="post" id="menu" onchange="this.form.submit()">
-        {% csrf_token %}
+    <h1>Online Library</h1>
+    <form name="menu">
         {{dropdown}}
-        <button type="submit">Submit</button>
+        <button type="submit">filter</button>
     </form>
 
 
     <ol>
         {% for book in books %}
         <li>
-            {{ book }} {{book.dept}}
+            <a href="/bookDetails/{{book.bookid}}">{{ book }}</a> {{book.dept}}
         </li>
         {% endfor %}
     </ol>
