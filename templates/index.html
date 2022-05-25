@@ -13,6 +13,13 @@
 </head>
 
 <body>
+    <nav>
+        {% if user.is_authenticated %} 
+            Hello 
+        {% else %}
+            Bye
+        {% endif %}
+    </nav>
     <h1>Hello from {{text}}!!!</h1>
 </body>
 
