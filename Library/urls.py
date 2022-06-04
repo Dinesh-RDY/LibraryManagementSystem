@@ -6,5 +6,5 @@ urlpatterns = [
     path("books/", showBooks, name="showBooks"),
     path("bookDetails/<int:pk>", showDetails, name="detailsPage"),
     path("logout", userLogout, name="logout"),
-    path("login" , loginPage, name="loginPage")
+    path("login" , loginPage, name="loginPage"),
 ]

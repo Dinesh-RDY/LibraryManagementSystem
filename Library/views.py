@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-
+from pprint import pprint
 # Create your views here.
 
 
@@ -17,36 +17,45 @@ def indexView(req):
 @login_required
 def showBooks(req):
     dept = req.GET.get("menu")
+    current_user = LibraryUsers.objects.filter(user=req.user)[0]
     if dept:
         books = Books.objects.filter(dept=dept)
+        filter = True
     else:
         books = Books.objects.all()
-    return render(req, "books.html", {"books": books, "dropdown": DropDownForm})
+        filter = False
+    return render(req, "books.html", {"books": books,
+                                      "dropdown": DropDownForm,
+                                      "librarian": current_user.is_librarian,
+                                      "filter": filter
+                                      })
 
 
 @login_required
 def showDetails(req, pk):
-    book = Books.objects.filter(bookid=pk)[0]
-    print(type(book))
-    return render(req, "book_details.html", {"book": book})
+    # book = Books.objects.filter(bookid=pk)[0]
+    # user = req.user
+    # return render(req, "book_details.html", {"book": book, "user": user})
+    with open('static/pdfs/1.pdf', 'rb') as pdf:
+        response = HttpResponse(pdf.read(), content_type="application/pdfs")
+        response['Content-Disposition'] = 'inline;filename=some_file.pdf'
+        return response
 
 
 @login_required
 def userLogout(req):
     logout(req)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect("/login")
 
 
 def loginPage(req):
-    print("LoginPage")
     if req.method == 'POST':
         print("Post")
         username = req.POST.get("username")
         password = req.POST.get("password")
-        user = authenticate(username=username, password=password)
+        user = authenticate(req, username=username, password=password)
         if user:
             if user.is_active:
-                print("In here")
                 login(req, user)
                 return HttpResponseRedirect("books")
             else:
