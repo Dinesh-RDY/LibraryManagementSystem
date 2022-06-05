@@ -11,6 +11,7 @@
 <body>
     {% if user.is_authenticated %} <a href= "{% url 'Library:logout' %}">Logout</a> {% else %} Bye{% endif %}
     <h1>Online Library</h1>
+    {% if librarian %}Hello Librarian You can edit books here ! {% else %} Not Librarian {% endif %}
     <form name="menu">
         {{dropdown}}
         <button type="submit">filter</button>
@@ -24,7 +25,9 @@
         </li>
         {% endfor %}
     </ol>
-
+    {% if filter %}
+        <a href="/books">All books</a>
+    {% endif %}
 </body>
 
 </html>
